@@ -1,5 +1,6 @@
 package com.xxl.job.core.log;
 
+import com.xxl.job.core.context.XxlJobContext;
 import com.xxl.job.core.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class XxlJobLogger {
         StackTraceElement callInfo = stackTraceElements[1];*/
 
         StringBuffer stringBuffer = new StringBuffer();
-        stringBuffer.append(DateUtil.format(new Date())).append(" ")
+        stringBuffer.append(DateUtil.formatDateTime(new Date())).append(" ")
             .append("["+ callInfo.getClassName() + "#" + callInfo.getMethodName() +"]").append("-")
             .append("["+ callInfo.getLineNumber() +"]").append("-")
             .append("["+ Thread.currentThread().getName() +"]").append(" ")
@@ -38,7 +39,8 @@ public class XxlJobLogger {
         String formatAppendLog = stringBuffer.toString();
 
         // appendlog
-        String logFileName = XxlJobFileAppender.contextHolder.get();
+        String logFileName = XxlJobContext.getXxlJobContext().getJobLogFileName();
+
         if (logFileName!=null && logFileName.trim().length()>0) {
             XxlJobFileAppender.appendLog(logFileName, formatAppendLog);
         } else {
